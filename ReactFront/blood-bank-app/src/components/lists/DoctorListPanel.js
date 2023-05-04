@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Grid, TextField } from '@mui/material';
+import { Box, Select, Button, Grid, TextField, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 export default class DoctorList extends React.Component {
@@ -7,6 +7,7 @@ export default class DoctorList extends React.Component {
     super(props);
     this.state = {
       doctors: [],
+      centers: [],
       newDoctorEmail: '',
       newDoctorPassword: '',
       newDoctorFirstName: '',
@@ -27,6 +28,13 @@ export default class DoctorList extends React.Component {
       .then(data => this.setState({ doctors: data }))
       .then(() => console.log(this.state.doctors))
       .catch(err => console.log(err));
+
+    fetch('http://localhost:8080/center')
+      .then(res => res.json())
+      .then(data => this.setState({ centers: data }))
+      .then(() => console.log(this.state.centers))
+      .catch(err => console.log(err));
+
   }
 
   handleDeleteDoctor(id) {
@@ -162,7 +170,7 @@ export default class DoctorList extends React.Component {
       }
     ];
 
-    const rows = this.state.doctors.map(doctor => ({ id: doctor.uuid, ...doctor }));
+    const rows = this.state.doctors.map(doctor => ({ id: doctor.uuid, email: doctor.email, password: doctor.password, firstName: doctor.firstName, lastName: doctor.lastName, cnp: doctor.cnp, center: doctor.center.name}));
 
     return (
       <Box sx={{ p: 3 }}>
@@ -218,13 +226,23 @@ export default class DoctorList extends React.Component {
             variant="outlined"
             required
           />
-          <TextField
+          <Select
+            sx={{
+            m: 1,
+            width: '220px',
+            height: '56px'
+            }}
             label="Center"
             name='newDoctorCenter'
             onChange={this.handleChange}
             value={this.state.newDoctorCenter}
             variant="outlined"
-          />
+            required
+            >
+            {this.state.centers.map(center => (
+              <MenuItem key={center.uuid} value={center.uuid}>{center.name}</MenuItem>
+            ))}
+          </Select>
         </Grid>
         <br/>
         <Button variant="contained" color="success" onClick={this.handleAddDoctor}>

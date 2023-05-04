@@ -2,7 +2,8 @@ import { Button, TextField, Box, Grid  } from '@mui/material';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import ClinicList from './ClinicListPanel';
+import ClinicList from '../lists/ClinicListPanel';
+import AppointmentListDonor from '../lists/AppointmentListDonor';
 
 export default class DonorDashboard extends React.Component {
     constructor(props) {
@@ -103,7 +104,7 @@ export default class DonorDashboard extends React.Component {
         return (
             <Box>
                 <Box sx = {{ p: 3}}>
-                    <h1>Hello, {this.state.firstName}</h1>
+                    <h1>Hello, {this.state.firstName}!</h1>
                     <Grid >
                         <TextField
                             label="First Name"
@@ -144,7 +145,12 @@ export default class DonorDashboard extends React.Component {
                         </Button>
                     </Grid>
                 </Box>
-                <ClinicList /> 
+                {this.state.uuid ==='' ? <div></div> :
+                <ClinicList donorUuid={this.state.uuid} />}
+                {this.state.uuid ==='' ? <div></div> :
+                <AppointmentListDonor donorUuid={this.state.uuid} />
+                }
+                 
             </Box>
         );
     }

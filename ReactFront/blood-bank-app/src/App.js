@@ -2,10 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import Home from './components/Home';
-import DonorPanel from './components/DonorHomePanel';
-import DoctorPanel from './components/DoctorHomePanel';
-import AdminPanel from './components/AdminHomePanel';
-import DemoPage from './components/DemoPage';
+import DonorPanel from './components/homepanel/DonorHomePanel';
+import DoctorPanel from './components/homepanel/DoctorHomePanel';
+import AdminPanel from './components/homepanel/AdminHomePanel';
+import DemoPage from './components/homepanel/DemoPage';
 
 function App() {
   return (

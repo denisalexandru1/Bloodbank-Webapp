@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Box, TextField, Button } from '@mui/material';
-import UserLoginPanel from './registerlogin/UserLoginPanel';
-import AdminDashboard from './AdminDashboard';
+import UserLoginPanel from '../registerlogin/UserLoginPanel';
+import AdminDashboard from '../dashboard/AdminDashboard';
 
 export default class AdminPanel extends React.Component {
   constructor(props) {

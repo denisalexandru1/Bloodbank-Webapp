@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
-import DoctorList from './DoctorListPanel';
+import DoctorList from '../lists/DoctorListPanel';
 
 export default class AdminDashboard extends React.Component {
   constructor(props) {

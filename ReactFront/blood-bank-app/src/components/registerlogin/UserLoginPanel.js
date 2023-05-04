@@ -34,7 +34,7 @@ export default class UserLoginPanel extends React.Component {
               console.log("Logged in successfully");
               alert("Logged in successfully");
               this.props.setLoggedIn();
-              this.props.setLoggedDonor(body);
+              this.props.setLoggedUser(body);
             }
             else {
               console.log("Invalid email or password");

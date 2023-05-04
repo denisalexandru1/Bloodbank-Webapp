@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
-import UserLoginPanel from './registerlogin/UserLoginPanel';
-import UserRegisterPanel from './registerlogin/UserRegisterPanel';
-import DonorDashboard from './DonorDashboard';
+import UserLoginPanel from '../registerlogin/UserLoginPanel';
+import UserRegisterPanel from '../registerlogin/UserRegisterPanel';
+import DonorDashboard from '../dashboard/DonorDashboard';
 
 export default class DonorPanel extends React.Component {
   constructor(props) {
@@ -14,7 +14,7 @@ export default class DonorPanel extends React.Component {
     };
 
     this.setLoggedIn = this.setLoggedIn.bind(this);
-    this.setLoggedDonor = this.setLoggedDonor.bind(this);
+    this.setLoggedUser = this.setLoggedUser.bind(this);
   }
 
   setLoggedIn = () => {
@@ -23,7 +23,7 @@ export default class DonorPanel extends React.Component {
     });
   };
 
-  setLoggedDonor(donor){
+  setLoggedUser(donor){
     console.log("Donor: " + donor.email + " " + donor.password);
     this.setState({
       loggedEmail: donor.email,
@@ -39,7 +39,7 @@ export default class DonorPanel extends React.Component {
         {!this.state.loggedIn ? (
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <UserLoginPanel userType="Donor" setLoggedIn={this.setLoggedIn} setLoggedDonor={this.setLoggedDonor}/>
+            <UserLoginPanel userType="Donor" setLoggedIn={this.setLoggedIn} setLoggedUser={this.setLoggedUser}/>
           </Grid>
           <Grid item xs={6}>
             <UserRegisterPanel userType="Donor" />
