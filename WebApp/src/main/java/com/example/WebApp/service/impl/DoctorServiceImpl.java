@@ -62,9 +62,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorDTO updateDoctor(UUID uuid, DoctorDTO dto) {
-        Optional<Doctor> Doctor = DoctorRepository.findById(uuid);
-        if(Doctor.isPresent()){
-            Doctor updatedDoctor = Doctor.get();
+        Optional<Doctor> doctor = DoctorRepository.findById(uuid);
+        if(doctor.isPresent()){
+            Doctor updatedDoctor = doctor.get();
             updatedDoctor.email = dto.email;
             updatedDoctor.password = dto.password;
             updatedDoctor.firstName = dto.firstName;
