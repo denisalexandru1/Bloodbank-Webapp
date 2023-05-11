@@ -1,7 +1,6 @@
 package com.example.WebApp.controller;
 
 import com.example.WebApp.dto.AppointmentDTO;
-import com.example.WebApp.entity.Appointment;
 import com.example.WebApp.service.AppointmentService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,8 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointment/center/{center}")
-    ResponseEntity<List<AppointmentDTO>> getAllAppointmentsByPaging(@PathVariable("center") UUID centerId, @RequestParam(defaultValue = "0") int page,
+    ResponseEntity<List<AppointmentDTO>> getAllAppointmentsByPaging(@PathVariable("center") UUID centerId,
+                                                                    @RequestParam(defaultValue = "0") int page,
                                                                     @RequestParam(defaultValue = "0") int size){
         Page<AppointmentDTO> appointments = appointmentService.getAllAppointmentsByPaging(centerId, page, size);
 

@@ -13,6 +13,8 @@ public class DonorMapper {
         donor.firstName = dto.firstName;
         donor.lastName = dto.lastName;
         donor.bloodType = dto.bloodType;
+        donor.smsReminder = dto.smsReminder;
+        donor.phone = dto.phone;
         return donor;
     }
 
@@ -23,6 +25,8 @@ public class DonorMapper {
         dto.firstName = donor.firstName;
         dto.lastName = donor.lastName;
         dto.bloodType = donor.bloodType;
+        dto.smsReminder = donor.smsReminder;
+        dto.phone = donor.phone;
         return dto;
     }
 }

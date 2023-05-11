@@ -9,4 +9,6 @@ public class DonorDTO {
     public String firstName;
     public String lastName;
     public String bloodType;
+    public Boolean smsReminder;
+    public String phone;
 }

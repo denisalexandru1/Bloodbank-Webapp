@@ -77,6 +77,8 @@ public class DonorServiceImpl implements DonorService {
             updatedDonor.firstName = dto.firstName;
             updatedDonor.lastName = dto.lastName;
             updatedDonor.bloodType = dto.bloodType;
+            updatedDonor.smsReminder = dto.smsReminder;
+            updatedDonor.phone = dto.phone;
             donorRepository.save(updatedDonor);
             return donorMapper.toDTO(updatedDonor);
         }

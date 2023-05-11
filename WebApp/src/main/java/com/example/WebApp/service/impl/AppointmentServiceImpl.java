@@ -2,6 +2,8 @@ package com.example.WebApp.service.impl;
 
 import com.example.WebApp.dto.AppointmentDTO;
 import com.example.WebApp.entity.Appointment;
+import com.example.WebApp.factory.AppointmentMessage;
+import com.example.WebApp.factory.NotificationFactory;
 import com.example.WebApp.mapper.AppointmentMapper;
 import com.example.WebApp.repository.AppointmentRepository;
 import com.example.WebApp.service.AppointmentService;
@@ -21,15 +23,29 @@ import java.util.UUID;
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
+    private final NotificationFactory notificationFactory;
 
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper) {
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper, NotificationFactory notificationFactory) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentMapper = appointmentMapper;
+        this.notificationFactory = notificationFactory;
     }
 
     @Override
     public AppointmentDTO createAppointment(AppointmentDTO dto) {
         Appointment createdAppointment = appointmentRepository.save(appointmentMapper.toAppointment(dto));
+        AppointmentMessage emailNotification = this.notificationFactory.createEmailNotification();
+        emailNotification.send(dto);
+
+        AppointmentMessage scheduledNotification;
+        if(dto.donor.smsReminder){
+            scheduledNotification = this.notificationFactory.createSMSNotification();
+        }
+        else{
+            scheduledNotification = this.notificationFactory.createScheduledEmailNotification();
+        }
+
+        scheduledNotification.send(dto);
         return appointmentMapper.toDTO(createdAppointment);
     }
 
