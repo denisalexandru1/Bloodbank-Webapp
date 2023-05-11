@@ -10,6 +10,7 @@ export default class UserRegisterPanel extends React.Component {
             firstName: '',
             lastName: '',
             bloodType: '',
+            smsReminder: false,
             userType: props.userType
         };
         this.registerListener = this.registerListener.bind(this);
@@ -27,7 +28,8 @@ export default class UserRegisterPanel extends React.Component {
                 password: this.state.password,
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
-                bloodType: this.state.bloodType
+                bloodType: this.state.bloodType,
+                smsReminder: this.state.smsReminder
             })
         };
 

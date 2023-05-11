@@ -14,7 +14,7 @@ export default class AdminDashboard extends React.Component {
   render() {
     return (
         <Box sx={{ p: 3 }}>
-            <DoctorList />  
+            <DoctorList /> 
         </Box>
     );
   }

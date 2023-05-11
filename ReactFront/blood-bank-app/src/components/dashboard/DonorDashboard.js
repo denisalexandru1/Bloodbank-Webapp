@@ -1,4 +1,4 @@
-import { Button, TextField, Box, Grid  } from '@mui/material';
+import { Button, TextField, Box, Grid, Switch} from '@mui/material';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
@@ -15,10 +15,13 @@ export default class DonorDashboard extends React.Component {
             firstName: '',
             lastName: '',
             bloodType: '',
+            phone:'',
+            smsReminder: false,
         };
 
         this.handleEditDonor = this.handleEditDonor.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSmsChange = this.handleSmsChange.bind(this);
     }
 
     componentDidMount() {
@@ -31,7 +34,9 @@ export default class DonorDashboard extends React.Component {
                             uuid: body.uuid,
                             firstName: body.firstName,
                             lastName: body.lastName,
-                            bloodType: body.bloodType
+                            bloodType: body.bloodType,
+                            phone: body.phone,
+                            smsReminder: body.smsReminder
                         })
                     })
                 }
@@ -53,7 +58,9 @@ export default class DonorDashboard extends React.Component {
                 password: this.state.password,
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
-                bloodType: this.state.bloodType
+                bloodType: this.state.bloodType,
+                phone: this.state.phone,
+                smsReminder: this.state.smsReminder
             })
         };
 
@@ -98,7 +105,12 @@ export default class DonorDashboard extends React.Component {
             [name]: value
         });
       }
-
+    
+    handleSmsChange(){
+        this.setState({
+            smsReminder: !this.state.smsReminder
+        })
+    }
     
     render() {
         return (
@@ -135,6 +147,19 @@ export default class DonorDashboard extends React.Component {
                             onChange={this.handleChange}
                             variant='outlined'
                         />
+                        <TextField
+                            label="Phone Number"
+                            name="phone"
+                            value={this.state.phone}
+                            onChange={this.handleChange}
+                            variant='outlined'
+                        />
+                        <Switch 
+                            name="smsReminder" 
+                            checked={this.state.smsReminder}
+                            onChange={this.handleSmsChange}
+                            variant='outlined'
+                        /> SMS Reminder for appointments
                         <br />
                         <br />
                         <Button variant="contained" color="primary" onClick={() => this.handleEditDonor()}>

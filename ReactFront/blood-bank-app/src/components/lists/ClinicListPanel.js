@@ -1,6 +1,6 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button  } from "@mui/material";
+import { Box, Button, Checkbox  } from "@mui/material";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -20,7 +20,8 @@ export default class ClinicList extends React.Component{
                 lastName: '',
                 email: '',
                 password: '',
-                bloodType: ''
+                bloodType: '',
+                smsReminder: false
             }
         };
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -33,15 +34,13 @@ export default class ClinicList extends React.Component{
             .then(data => {this.setState({centers: data})
              console.log("Centers: " , data)})
             .catch(err => console.log(err));
-        
-        console.log("Donor uuid from client list: " + this.state.donorUuid);
 
         const requestOptions = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
-            mode: 'no-cors'
+            //mode: 'no-cors'
             };
 
         if(this.state.donorUuid !== ''){
@@ -58,6 +57,7 @@ export default class ClinicList extends React.Component{
                     }
                     else{
                         console.log("Error in donor fetch: " + res.status);
+                        console.log(this.state.donorUuid)
                     }
                 })
             .catch(err => console.log(err));
@@ -81,8 +81,6 @@ export default class ClinicList extends React.Component{
             this.setState({ centers: updatedCenters });
         });
     }
-    
-      
 
     handleSchedule(center){
         const requestOptions = {
@@ -94,7 +92,7 @@ export default class ClinicList extends React.Component{
                 donor: this.state.donor,
                 center: center,
                 date: this.state.selectedDate.format('YYYY-MM-DD'),
-                validated: false
+                validated: false,
             }) 
         };
         fetch("http://localhost:8080/appointment", requestOptions)
