@@ -1,6 +1,8 @@
 package com.example.WebApp.controller;
 
 import com.example.WebApp.dto.DoctorDTO;
+import com.example.WebApp.service.AppointmentService;
+import com.example.WebApp.service.ArticleService;
 import com.example.WebApp.service.DoctorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,11 @@ import java.util.UUID;
 @RestController
 public class DoctorController {
     private final DoctorService doctorService;
+    private final ArticleService articleService;
 
-    public DoctorController(DoctorService doctorService) {
+    public DoctorController(DoctorService doctorService, ArticleService articleService) {
         this.doctorService = doctorService;
+        this.articleService = articleService;
     }
 
     @PostMapping("/doctor")
@@ -41,8 +45,8 @@ public class DoctorController {
         return ResponseEntity.ok(doctor);
     }
 
-    @PutMapping("/doctor/{id}")
-    ResponseEntity<DoctorDTO> updateDoctor(@PathVariable("id") UUID uuid, @RequestBody DoctorDTO dto){
+    @PutMapping("/doctor/{uuid}")
+    ResponseEntity<DoctorDTO> updateDoctor(@PathVariable("uuid") UUID uuid, @RequestBody DoctorDTO dto){
         DoctorDTO updatedDoctor = doctorService.updateDoctor(uuid, dto);
         return ResponseEntity.ok(updatedDoctor);
     }
@@ -50,6 +54,7 @@ public class DoctorController {
     @DeleteMapping("/doctor/{id}")
     ResponseEntity<DoctorDTO> deleteDoctor(@PathVariable("id") UUID uuid){
         doctorService.deleteDoctor(uuid);
+        articleService.deleteAllArticlesByDoctorUUID(uuid);
         return ResponseEntity.ok().build();
     }
 }

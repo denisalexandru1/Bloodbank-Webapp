@@ -14,4 +14,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     List<Appointment> findAllByDateAndCenterUuid(LocalDate date, UUID centerUUID);
     List<Appointment> findAllByDonorUuid(UUID donorUUID);
     Page<Appointment> findAllByCenterUuid(UUID centerId, Pageable pageable);
+    long deleteByDonor_Uuid(UUID uuid);
 }

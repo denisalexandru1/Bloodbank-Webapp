@@ -7,6 +7,7 @@ import com.example.WebApp.factory.NotificationFactory;
 import com.example.WebApp.mapper.AppointmentMapper;
 import com.example.WebApp.repository.AppointmentRepository;
 import com.example.WebApp.service.AppointmentService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -109,5 +110,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
-
+    @Override
+    @Transactional
+    public void deleteAllAppointmentsByDonorUUID(UUID donorId) {
+        appointmentRepository.deleteByDonor_Uuid(donorId);
+    }
 }

@@ -19,4 +19,5 @@ public interface AppointmentService {
     List<AppointmentDTO> getAllAppointmentsByDateAndCenterUUID(LocalDate date, UUID centerId);
     List<AppointmentDTO> getAllAppointmentsByDonorUUID(UUID donorId);
     AppointmentDTO updateAppointment(UUID uuid, AppointmentDTO dto);
+    void deleteAllAppointmentsByDonorUUID(UUID donorId);
 }

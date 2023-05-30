@@ -1,6 +1,7 @@
 package com.example.WebApp.controller;
 
 import com.example.WebApp.dto.DonorDTO;
+import com.example.WebApp.service.AppointmentService;
 import com.example.WebApp.service.DonorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,11 @@ import java.util.UUID;
 public class DonorController {
 
     private final DonorService donorService;
+    private final AppointmentService appointmentService;
 
-    public DonorController(DonorService donorService) {
+    public DonorController(DonorService donorService, AppointmentService appointmentService) {
         this.donorService = donorService;
+        this.appointmentService = appointmentService;
     }
 
     @PostMapping("/donor/register")
@@ -51,7 +54,7 @@ public class DonorController {
     @DeleteMapping("/donor/{id}")
     ResponseEntity<DonorDTO> deleteDonor(@PathVariable("id") UUID uuid){
         donorService.deleteDonor(uuid);
+        appointmentService.deleteAllAppointmentsByDonorUUID(uuid);
         return ResponseEntity.ok().build();
     }
-
 }
