@@ -17,7 +17,6 @@ export default class AppointmentListDoctorToday extends React.Component {
         const now = new Date();
         const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Europe/Bucharest' };
         const dateString = now.toLocaleDateString('en-GB', options).split('/').reverse().join('-');
-        //console.log("http://localhost:8080/appointment/" + dateString + "/" + this.state.centerUuid)
         fetch("http://localhost:8080/appointment/" + dateString + "/" + this.state.centerUuid)
             .then(res => {
                 if (res.ok) {

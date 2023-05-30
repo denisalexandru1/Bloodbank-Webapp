@@ -1,8 +1,8 @@
-import React from 'react';
-import { Box, Select, Button, Grid, TextField, MenuItem, FormControl, InputLabel } from '@mui/material';
+import React, { Component } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { Button, MenuItem, Select, Box, Grid, TextField } from '@mui/material';
 
-export default class DoctorList extends React.Component {
+export default class DoctorList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +14,7 @@ export default class DoctorList extends React.Component {
       newDoctorLastName: '',
       newDoctorCnp: '',
       newDoctorCenter: null
-      };
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleAddDoctor = this.handleAddDoctor.bind(this);
     this.handleDeleteDoctor = this.handleDeleteDoctor.bind(this);
@@ -22,34 +22,28 @@ export default class DoctorList extends React.Component {
   }
 
   componentDidMount() {
-    // Fetch list of doctors from server and update state
     fetch('http://localhost:8080/doctor')
       .then(res => res.json())
       .then(data => this.setState({ doctors: data }))
-      .then(() => console.log(this.state.doctors))
       .catch(err => console.log(err));
 
     fetch('http://localhost:8080/center')
       .then(res => res.json())
       .then(data => this.setState({ centers: data }))
-      .then(() => console.log(this.state.centers))
       .catch(err => console.log(err));
-
   }
 
-  handleDeleteDoctor(id) {
-    // Send DELETE request to server to delete doctor with given id
-    fetch(`http://localhost:8080/doctor/${id}`, {
+  handleDeleteDoctor(uuid) {
+    fetch(`http://localhost:8080/doctor/${uuid}`, {
       method: 'DELETE'
     })
       .then(res => {
         if (res.ok) {
-          // Remove deleted doctor from state
           this.setState(prevState => ({
-            doctors: prevState.doctors.filter(doctor => doctor.uuid !== id)
+            doctors: prevState.doctors.filter(doctor => doctor.uuid !== uuid)
           }));
-        }
-        else {
+          console.log('Doctor deleted successfully');
+        } else {
           console.log('Error deleting doctor');
         }
       })
@@ -57,123 +51,148 @@ export default class DoctorList extends React.Component {
   }
 
   handleEditDoctor(doctor) {
-    fetch(`http://localhost:8080/doctor/${doctor.uuid}`, {
+    const { doctors } = this.state;
+    const updatedDoctors = doctors.map(d => {
+      if (d.uuid === doctor.uuid) {
+        return {
+          ...doctor,
+          center: {
+            ...doctor.center
+          }
+        };
+      }
+      return d;
+    });
+
+    const requestOptions = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        email: doctor.email,
-        password: doctor.password,
-        firstName: doctor.firstName,
-        lastName: doctor.lastName,
-        cnp: doctor.cnp,
-        center: doctor.center
-      })
-    })
+      body: JSON.stringify(updatedDoctors.find(d => d.uuid === doctor.uuid))
+    };
+
+    fetch(`http://localhost:8080/doctor/${doctor.uuid}`, requestOptions)
       .then(res => {
         if (res.ok) {
-          // Update doctor in state
-          this.setState(prevState => ({
-            doctors: prevState.doctors.map(doc => {
-              if (doc.uuid === doctor.uuid) {
-                return {
-                  ...doc,
-                  email: doctor.email,
-                  password: doctor.password,
-                  firstName: doctor.firstName,
-                  lastName: doctor.lastName,
-                  cnp: doctor.cnp,
-                  center: doctor.center
-                };
-              }
-              else {
-                return doc;
-              }
-            })
-          }));
-          console.log('Doctor updated successfully');
-        }
-        else {
-          console.log('Error updating doctor');
+          console.log('Doctor edited successfully');
+        } else {
+          console.log('Error editing doctor');
         }
       })
       .catch(err => console.log(err));
   }
 
   handleAddDoctor() {
+    const {
+      newDoctorEmail,
+      newDoctorPassword,
+      newDoctorFirstName,
+      newDoctorLastName,
+      newDoctorCnp,
+      newDoctorCenter
+    } = this.state;
+
     const requestOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email: this.state.newDoctorEmail,
-        password: this.state.newDoctorPassword,
-        firstName: this.state.newDoctorFirstName,
-        lastName: this.state.newDoctorLastName,
-        cnp: this.state.newDoctorCnp,
-        center: this.state.newDoctorCenter
+        email: newDoctorEmail,
+        password: newDoctorPassword,
+        firstName: newDoctorFirstName,
+        lastName: newDoctorLastName,
+        cnp: newDoctorCnp,
+        center: {
+          uuid: newDoctorCenter
+        }
       })
     };
-  
+
     fetch('http://localhost:8080/doctor', requestOptions)
       .then(res => {
         if (res.ok) {
           console.log('Doctor added successfully');
-          alert('Doctor added successfully');
           this.componentDidMount();
         } else {
           console.log('Error adding doctor');
-          alert('Error adding doctor');
         }
       })
       .catch(err => console.log(err));
   }
-  
-  
+
   handleChange(event) {
     const { name, value } = event.target;
     this.setState({
-        [name]: value
+      [name]: value
     });
   }
 
   render() {
+    const { doctors, centers } = this.state;
+
     const columns = [
-      { field: 'id', headerName: 'Id', editable: true, width: 100 },
+      { field: 'id', headerName: 'ID', editable: true, width: 100 },
       { field: 'email', headerName: 'Email', editable: true, width: 200 },
       { field: 'password', headerName: 'Password', editable: true, width: 150 },
       { field: 'firstName', headerName: 'First Name', editable: true, width: 150 },
       { field: 'lastName', headerName: 'Last Name', editable: true, width: 150 },
       { field: 'cnp', headerName: 'CNP', editable: true, width: 150 },
-      { field: 'center', headerName: 'Center', editable: true, width: 200 },
+      {
+        field: 'center',
+        headerName: 'Center',
+        width: 250,
+        renderCell: params => (
+          <Select
+            value={params.row.center.uuid}
+            onChange={event => {
+              const { value } = event.target;
+              const updatedDoctors = doctors.map(doctor =>
+                doctor.uuid === params.row.id ? { ...doctor, center: { ...params.row.center, uuid: value } } : doctor
+              );
+              this.setState({ doctors: updatedDoctors });
+            }}
+          >
+            {centers.map(center => (
+              <MenuItem key={center.uuid} value={center.uuid}>
+                {center.name}
+              </MenuItem>
+            ))}
+          </Select>
+        )
+      },
       {
         field: 'actions',
         headerName: 'Actions',
         sortable: false,
         filterable: false,
         width: 200,
-        renderCell: (params) => {
-          const doctor = params.row;
-          return (
-            <>
-              <Button variant="contained" color="primary" onClick={() => this.handleEditDoctor(doctor)}>
-                Edit
-              </Button>
-              <Button variant="contained" color="error" onClick={() => this.handleDeleteDoctor(doctor.id)}>
-                Delete
-              </Button>
-            </>
-          );
-        }
+        renderCell: params => (
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => this.handleEditDoctor(params.row)}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => this.handleDeleteDoctor(params.row.id)}
+            >
+              Delete
+            </Button>
+          </>
+        )
       }
     ];
 
-    const rows = this.state.doctors.map(doctor => ({ id: doctor.uuid, email: doctor.email, password: doctor.password, firstName: doctor.firstName, lastName: doctor.lastName, cnp: doctor.cnp, center: doctor.center.name}));
+    const rows = doctors.map(doctor => ({ id: doctor.uuid, ...doctor }));
 
     return (
-      <Box sx={{ p: 3 }}>
+      <Box>
         <h1>Doctors</h1>
         <DataGrid
           columns={columns}
@@ -182,7 +201,8 @@ export default class DoctorList extends React.Component {
           rowsPerPageOptions={[10]}
           autoHeight
         />
-        <br/>
+        <br />
+        <h2>Add Doctor</h2>
         <Grid>
           <TextField
             label="Email"
@@ -228,9 +248,9 @@ export default class DoctorList extends React.Component {
           />
           <Select
             sx={{
-            m: 1,
-            width: '220px',
-            height: '56px'
+              m: 1,
+              width: '220px',
+              height: '56px'
             }}
             label="Center"
             name='newDoctorCenter'
@@ -238,8 +258,8 @@ export default class DoctorList extends React.Component {
             value={this.state.newDoctorCenter}
             variant="outlined"
             required
-            >
-            {this.state.centers.map(center => (
+          >
+            {centers.map(center => (
               <MenuItem key={center.uuid} value={center.uuid}>{center.name}</MenuItem>
             ))}
           </Select>

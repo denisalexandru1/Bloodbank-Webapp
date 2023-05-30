@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Grid } from "@mui/material";
 import AppointmentListDoctorToday from "../lists/AppointmentListDoctorToday";
 import AppointmentListDoctorTotal from "../lists/AppointmentListDoctorTotal";
+import ArticleListDoctor from "../lists/ArticleListDoctor";
+import ArticleCreateComponent from "../ArticleCreateComponent";
 
 export default class DoctorDashboard extends React.Component {
     constructor(props) {
@@ -49,13 +51,17 @@ export default class DoctorDashboard extends React.Component {
         <Box>
             {this.state.uuid ==='' ?<div></div> :
             <Box sx={{ p: 3 }}>
-                <h1>Welcome back, Dr. {this.state.firstName}!</h1>
-                <h2>Center: {this.state.center.name}</h2>
+                <div style={{textAlign: 'center'}}>
+                    <h1>Welcome back, Dr. {this.state.firstName}!</h1>
+                    <h2>Center: {this.state.center.name}</h2>
+                </div>
                 <AppointmentListDoctorToday centerUuid={this.state.center.uuid}/>
                 <AppointmentListDoctorTotal centerUuid={this.state.center.uuid}/>
+                <ArticleListDoctor doctorUuid={this.state.uuid}/>
+                <ArticleCreateComponent doctorUuid={this.state.uuid}/>
             </Box>
             }
         </Box>
         );
     }
-    }
+}

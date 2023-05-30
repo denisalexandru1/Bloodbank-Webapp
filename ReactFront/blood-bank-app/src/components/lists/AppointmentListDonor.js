@@ -46,7 +46,9 @@ export default class AppointmentListDonor extends React.Component{
                     rowsPerPageOptions={[10]}
                     autoHeight
                 />
-                <Button variant="contained" onClick={() => this.handleRefresh()}>Refresh appointments</Button>
+                <Button variant="contained" onClick={() => this.handleRefresh()}>
+                    Refresh appointments
+                </Button>
             </Box>
         );
     }

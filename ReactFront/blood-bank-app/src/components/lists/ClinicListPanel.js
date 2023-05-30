@@ -105,9 +105,9 @@ export default class ClinicList extends React.Component{
                 }
             })
             .catch(err => console.log(err));
+        this.handleDateChange(this.state.selectedDate);
         this.componentDidMount();
     }
-    
 
     render(){
         const columns = [

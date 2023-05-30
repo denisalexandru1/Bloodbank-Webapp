@@ -104,7 +104,7 @@ export default class DonorDashboard extends React.Component {
         this.setState({
             [name]: value
         });
-      }
+    }
     
     handleSmsChange(){
         this.setState({
